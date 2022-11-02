@@ -1,10 +1,12 @@
-const getNotes = async () => [
-    'Occaecat quis est amet in et.',
-    'Ex officia fugiat deserunt magna nostrud aliqua proident mollit deserunt proident. Ex officia fugiat deserunt magna nostrud aliqua proident mollit deserunt proident. Ex officia fugiat deserunt magna nostrud aliqua proident mollit deserunt proident. Ex officia fugiat deserunt magna nostrud aliqua proident mollit deserunt proident. Ex officia fugiat deserunt magna nostrud aliqua proident mollit deserunt proident.',
-    'Eiusmod mollit id esse officia pariatur elit mollit amet laborum.',
-    'Pariatur ipsum laborum nisi do.',
-    'Est commodo esse nostrud incididunt commodo.',
-]
+import { PrismaClient } from '@prisma/client'
+import { Input } from './input'
+
+const getNotes = async () => {
+    const prisma = new PrismaClient()
+    const notes = await prisma.note.findMany()
+
+    return notes
+}
 
 export default async () => {
     const notes = await getNotes()
@@ -12,12 +14,7 @@ export default async () => {
         <div className="flex flex-col items-center space-y-10">
             <div className="flex flex-col items-center space-y-5 w-full">
                 <div className="text-2xl font-semibold">Notebook</div>
-                <input
-                    className="bg-slate-200 bg-opacity-70 pl-6 pr-10 py-5 w-full rounded-lg focus:outline-none focus-within:ring-4 transition duration-150"
-                    type="text"
-                    name="add-note"
-                    placeholder="Add a new note"
-                />
+                <Input />
             </div>
 
             <div className="flex flex-col space-y-4 w-full">
@@ -26,7 +23,7 @@ export default async () => {
                         key={key}
                         className="bg-slate-200 bg-opacity-70 text-slate-700 w-full py-10 px-14 text-justify flex justify-center items-center rounded-lg"
                     >
-                        {note}
+                        {note.message}
                     </div>
                 ))}
             </div>
